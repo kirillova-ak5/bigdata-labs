@@ -13,11 +13,12 @@ def func_distribution(a):
     return distr, distr_x
 
 
-def median(a):
+def median(b: np.ndarray):
+    a = b.copy()
     a.sort()
     if a.size % 2:
-        return (a[(a.size - 1) / 2 - 1] + a[(a.size + 1) / 2] - 1) / 2.0
-    return a[int(a.size / 2) - 1]
+        return a[int(a.size / 2)]
+    return (a[int((a.size) / 2)] + a[int((a.size) / 2 - 1)]) / 2.0
 
 
 def upper_quartile(a):
@@ -34,3 +35,9 @@ def lower_quartile(a):
     if a.size % 4:
         return a[a.size - int(a.size / 4) + 1]
     return a[a.size - int(a.size / 4)]
+
+
+def rot_point_arr(a):
+    f = lambda a, b, c: 1 if (b > a and b > c) or (b < a and b < c) else 0
+    rot = np.array([f(a[i], a[i + 1], a[i + 2]) for i in range(a.size - 2)])
+    return rot
