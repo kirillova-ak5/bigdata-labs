@@ -4,7 +4,7 @@ import numpy as np
 
 
 def threeSigmRule(num, mean, err):
-    if abs(num) > mean + 3 * err:
+    if abs(num - mean ) > 3 * err:
         return False
 
     return True
