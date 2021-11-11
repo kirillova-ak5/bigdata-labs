@@ -13,6 +13,9 @@ def lab1_task1():
     a = np.arange(-10.0, 6.0, 1.0)
     b = np.arange(-5.0, 10.1, 1.0)
     w = np.ones(16)
+    for i in range(w.size):
+        w[i] += np.random.normal()
+    print("weights is ", w)
     print("A is ", a, " norm is ", my_beautiful_norm(a, w))
     print("B is ", b, " norm is ", my_beautiful_norm(b, w))
 
@@ -29,7 +32,7 @@ def min_max_sum(v: np.ndarray):
     m1 = v.min()
     m2 = v.max()
     m3 = v.sum()
-    return  m1, m2, m3
+    return m1, m2, m3
 
 
 def lab1_task2():
@@ -48,9 +51,12 @@ def fak(n: int):
 
 import lab2
 import lab3
+import lab4
 
 if __name__ == '__main__':
+    #lab1_task1()
     #print(fak(100000))
     #lab2.lab2()
-    lab3.lab3()
+    #lab3.lab3()
+    lab4.lab4()
 

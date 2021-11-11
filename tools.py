@@ -41,3 +41,16 @@ def rot_point_arr(a):
     f = lambda a, b, c: 1 if (b > a and b > c) or (b < a and b < c) else 0
     rot = np.array([f(a[i], a[i + 1], a[i + 2]) for i in range(a.size - 2)])
     return rot
+
+
+def range_correlation(a):
+    p = 0
+    for i in range(a.size):
+        for j in range(i):
+            if a[i] > a[j] and i > j:
+                p += 1
+    return p
+
+
+def kendel_coef(p, n):
+    return 4.0 * p / (n * (n - 1.0)) - 1.0

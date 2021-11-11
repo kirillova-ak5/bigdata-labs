@@ -68,15 +68,104 @@ def lab3():
     plt.legend()
     plt.show()
 
+    r_est = 2.0 / 3.0 * (x.size - 2)
+    r_disp = (16 * x.size - 29) / 90.0
+    print('num of rotation points estimated: ', r_est)
+    print('dispersion of rotation points: ', r_disp)
+
     r_mean_21 = x - x_mean_21
     print('num of rotation points r_mean_21: %i', tools.rot_point_arr(r_mean_21).sum())
+    if tools.rot_point_arr(r_mean_21).sum() < r_est + r_disp and tools.rot_point_arr(r_mean_21).sum() > r_est - r_disp:
+        print('rot point random')
+    elif tools.rot_point_arr(r_mean_21).sum() > r_est + r_disp:
+        print('rot point oscillating')
+    elif tools.rot_point_arr(r_mean_21).sum() < r_est - r_disp:
+        print('rot point korrelation')
     r_mean_51 = x - x_mean_51
     print('num of rotation points r_mean_51: %i', tools.rot_point_arr(r_mean_51).sum())
+    if tools.rot_point_arr(r_mean_51).sum() < r_est + r_disp and tools.rot_point_arr(r_mean_51).sum() > r_est - r_disp:
+        print('rot point random')
+    elif tools.rot_point_arr(r_mean_51).sum() > r_est + r_disp:
+        print('rot point oscillating')
+    elif tools.rot_point_arr(r_mean_51).sum() < r_est - r_disp:
+        print('rot point korrelation')
     r_mean_111 = x - x_mean_111
     print('num of rotation points r_mean_111: %i', tools.rot_point_arr(r_mean_111).sum())
+    if tools.rot_point_arr(r_mean_111).sum() < r_est + r_disp and tools.rot_point_arr(r_mean_111).sum() > r_est - r_disp:
+        print('rot point random')
+    elif tools.rot_point_arr(r_mean_111).sum() > r_est + r_disp:
+        print('rot point oscillating')
+    elif tools.rot_point_arr(r_mean_111).sum() < r_est - r_disp:
+        print('rot point korrelation')
     r_med_21 = x - x_med_21
     print('num of rotation points r_med_21: %i', tools.rot_point_arr(r_med_21).sum())
+    if tools.rot_point_arr(r_med_21).sum() < r_est + r_disp and tools.rot_point_arr(r_med_21).sum() > r_est - r_disp:
+        print('rot point random')
+    elif tools.rot_point_arr(r_med_21).sum() > r_est + r_disp:
+        print('rot point oscillating')
+    elif tools.rot_point_arr(r_med_21).sum() < r_est - r_disp:
+        print('rot point korrelation')
     r_med_51 = x - x_med_51
     print('num of rotation points r_med_51: %i', tools.rot_point_arr(r_med_51).sum())
+    if tools.rot_point_arr(r_med_51).sum() < r_est + r_disp and tools.rot_point_arr(r_med_51).sum() > r_est - r_disp:
+        print('rot point random')
+    elif tools.rot_point_arr(r_med_51).sum() > r_est + r_disp:
+        print('rot point oscillating')
+    elif tools.rot_point_arr(r_med_51).sum() < r_est - r_disp:
+        print('rot point korrelation')
     r_med_111 = x - x_med_111
     print('num of rotation points r_med_111: %i', tools.rot_point_arr(r_med_111).sum())
+    if tools.rot_point_arr(r_med_111).sum() < r_est + r_disp and tools.rot_point_arr(r_med_111).sum() > r_est - r_disp:
+        print('rot point random')
+    elif tools.rot_point_arr(r_med_111).sum() > r_est + r_disp:
+        print('rot point oscillating')
+    elif tools.rot_point_arr(r_med_111).sum() < r_est - r_disp:
+        print('rot point korrelation')
+
+    k_disp = 2.0 * (2.0 * x.size + 5.0) / (9.0 * x.size * (x.size - 1.0))
+    print('Kendel estimated: ', 0)
+    print('dispersion of Kendel: ', k_disp)
+
+    if abs(tools.kendel_coef(tools.range_correlation(r_mean_21), r_mean_21.size)) < k_disp * 3.0:
+        print('kendel random')
+    elif tools.kendel_coef(tools.range_correlation(r_mean_21), r_mean_21.size) < 0:
+        print('kendel decreasing: ', tools.kendel_coef(tools.range_correlation(r_mean_21), r_mean_21.size))
+    else:
+        print('kendel increasing: ', tools.kendel_coef(tools.range_correlation(r_mean_21), r_mean_21.size))
+
+    if abs(tools.kendel_coef(tools.range_correlation(r_mean_51), r_mean_51.size)) < k_disp * 3.0:
+        print('kendel random')
+    elif tools.kendel_coef(tools.range_correlation(r_mean_51), r_mean_51.size) < 0:
+        print('kendel decreasing: ', tools.kendel_coef(tools.range_correlation(r_mean_51), r_mean_51.size))
+    else:
+        print('kendel increasing: ', tools.kendel_coef(tools.range_correlation(r_mean_51), r_mean_51.size))
+
+    if abs(tools.kendel_coef(tools.range_correlation(r_mean_111), r_mean_111.size)) < k_disp * 3.0:
+        print('kendel random')
+    elif tools.kendel_coef(tools.range_correlation(r_mean_111), r_mean_111.size) < 0:
+        print('kendel decreasing: ', tools.kendel_coef(tools.range_correlation(r_mean_111), r_mean_111.size))
+    else:
+        print('kendel increasing: ', tools.kendel_coef(tools.range_correlation(r_mean_111), r_mean_111.size))
+
+    if abs(tools.kendel_coef(tools.range_correlation(r_med_21), r_med_21.size)) < k_disp * 3.0:
+        print('kendel random')
+    elif tools.kendel_coef(tools.range_correlation(r_med_21), r_med_21.size) < 0:
+        print('kendel decreasing: ', tools.kendel_coef(tools.range_correlation(r_med_21), r_med_21.size))
+    else:
+        print('kendel increasing: ', tools.kendel_coef(tools.range_correlation(r_med_21), r_med_21.size))
+
+    if abs(tools.kendel_coef(tools.range_correlation(r_med_51), r_med_51.size)) < k_disp * 3.0:
+        print('kendel random')
+    elif tools.kendel_coef(tools.range_correlation(r_med_51), r_med_51.size) < 0:
+        print('kendel decreasing: ', tools.kendel_coef(tools.range_correlation(r_med_51), r_med_51.size))
+    else:
+        print('kendel increasing: ', tools.kendel_coef(tools.range_correlation(r_med_51), r_med_51.size))
+
+    if abs(tools.kendel_coef(tools.range_correlation(r_med_111), r_med_111.size)) < k_disp * 3.0:
+        print('kendel random')
+    elif tools.kendel_coef(tools.range_correlation(r_med_111), r_med_111.size) < 0:
+        print('kendel decreasing: ', tools.kendel_coef(tools.range_correlation(r_med_111), r_med_111.size))
+    else:
+        print('kendel increasing: ', tools.kendel_coef(tools.range_correlation(r_med_111), r_med_111.size))
+
+
