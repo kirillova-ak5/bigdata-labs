@@ -52,6 +52,7 @@ def fak(n: int):
 import lab2
 import lab3
 import lab4
+import lab8
 
 if __name__ == '__main__':
     #lab1_task1()
@@ -59,4 +60,5 @@ if __name__ == '__main__':
     #lab2.lab2()
     #lab3.lab3()
     lab4.lab4()
+    #lab8.lab8()
 
