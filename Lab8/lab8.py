@@ -1,23 +1,10 @@
 import math
-
 import numpy as np
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
 import matplotlib.pyplot as plt
 import pandas as pd
-import lxml
 
-def pearsonr(x, y):
-    # Assume len(x) == len(y)
-    n = len(x)
-    sum_x = float(sum(x))
-    sum_y = float(sum(y))
-    sum_x_sq = sum(xi*xi for xi in x)
-    sum_y_sq = sum(yi*yi for yi in y)
-    psum = sum(xi*yi for xi, yi in zip(x, y))
-    num = psum - (sum_x * sum_y/n)
-    den = pow((sum_x_sq - pow(sum_x, 2) / n) * (sum_y_sq - pow(sum_y, 2) / n), 0.5)
-    if den == 0: return 0
-    return num / den
 
 def getRss(X,Y):
     mean_x = np.mean(X)
@@ -35,7 +22,110 @@ def getDataWeightHeight(num):
 
     x = np.array(data['Height']).reshape((-1, 1))
     y = np.array(data['Weight'])
+    return x, y
+
+def prepareDataTemp():
+    years, data = pd.read_html('./AverageMSKTemp.htm')
+    data = data.drop(list(range(82))+[243])
+    years = years.drop(list(range(82))+[243])
+    data.loc[:,:] = data.loc[:,:].astype('float32')
+    years.loc[:, :] = years.loc[:, :].astype('float32')
+    y, x = data.mean(axis=1).values, years.values
+
+    x = x.reshape(-1)
+    y = y.reshape(-1)
+    new_data = {'Year': x, 'Temperature': y}
+
+    df = pd.DataFrame(new_data, columns= ['Year', 'Temperature'])
+    df.to_csv (r'./Temp.csv', index = False, header=True)
+    return
+
+
+
+def getDataAverageTemp(num):
+    data = pd.read_csv('Temp.csv').head(num)   #load first num elems
+
+    x = np.array(data['Year']).reshape((-1, 1))
+    y = np.array(data['Temperature'])
     return x,y
+
+
+def lab8():
+    num = 162
+    #prepareDataTemp()                  #uses for parsing ,htm file to csv
+    #x,y = getDataWeightHeight(num)     #data with weight and height;        max == 10000 elem
+    x,y = getDataAverageTemp(num)       #data with years and temp;       max == 162 elem
+
+    model = LinearRegression().fit(x,y)
+
+    print('y = ', model.intercept_, ' + ', model.coef_[0], '* x')
+    y_pred = model.intercept_ + model.coef_[0] * x
+    plt.title('Linear regression')
+    plt.scatter(x,y, color='red', label='Actual data')
+    plt.plot(x, y_pred, c='blue', label='Regression Line')
+    plt.show()
+
+    rss = getRss(x, y_pred)
+    print('RSS = ', rss)
+    print('RSE = ', rss/(x.size - 2))
+    print('mu^2 =  ', r2_score(y, y_pred))
+
+
+
+    plt.figure()
+    plt.title('Multiplicative regression')
+    plt.scatter(x, y, color='red', label='Actual data')
+
+    log_x = x.astype(float)
+    log_y = y
+    for i in range (len(x)):
+        log_x[i] = float(math.log(float(x[i])))
+        log_y[i] = math.log(y[i])
+
+    model = LinearRegression().fit(log_x, log_y)
+    print('y = ', model.intercept_, ' * x ^', model.coef_[0], )
+
+    y_pred = model.intercept_ + log_x * model.coef_[0]
+
+    rss = getRss(log_x, y_pred)
+    print('RSS = ', rss)
+    print('RSE = ', rss/(log_x.size - 2))
+    print('mu^2 =  ', r2_score(y, y_pred))
+
+    for i in range (len(log_x)):
+        y_pred[i] = math.exp(y_pred[i])
+        log_x[i] = math.exp(log_x[i])
+
+    plt.plot(log_x, y_pred, c='blue', label='Regression Line')
+    plt.show()
+
+'''
+import math
+
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+import matplotlib.pyplot as plt
+import pandas as pd
+import lxml
+
+def getRss(X,Y):
+    mean_x = np.mean(X)
+    mean_y = np.mean(Y)
+    res = 0.0
+
+    for i in range(len(X)):
+        res += (X[i] - mean_x) * (Y[i] - mean_y)
+    return res
+
+def getDataWeightHeight(num):
+    data = pd.read_csv('weight-height.csv').head(num)   #load first num elems
+    data['Height'] *= 2.54
+    data['Weight'] /= 2.205         #to kilo and meters
+
+    x = np.array(data['Height']).reshape((-1, 1))
+    y = np.array(data['Weight'])
+    return x, y
 
 def prepareDataTemp():
     years, data = pd.read_html('./AverageMSKTemp.htm')
@@ -66,8 +156,8 @@ def getDataAverageTemp(num):
 if __name__ == "__main__":
     num = 161
     #prepareDataTemp()                  #uses for parsing ,htm file to csv
-    #x,y = getDataWeightHeight(num)     #data with weight and height
-    x,y = getDataAverageTemp(num)       #data with years and temp
+    x,y = getDataWeightHeight(num)     #data with weight and height
+    #x,y = getDataAverageTemp(num)       #data with years and temp
 
     model = LinearRegression().fit(x,y)
 
@@ -82,7 +172,7 @@ if __name__ == "__main__":
     rss = getRss(x_new, y_pred)
     print('RSS = ', rss)
     print('RSE = ', rss/(x_new.size - 2))
-    print('mu^2 =  ', pearsonr(x_new, y_pred))
+    print('mu^2 =  ', r2_score(y, y_pred))
 
 
 
@@ -106,7 +196,7 @@ if __name__ == "__main__":
     rss = math.exp(getRss(x_new, y_pred))
     print('RSS = ', rss)
     print('RSE = ', rss/(x_new.size - 2))
-    print('mu^2 =  ', pearsonr(x_new, y_pred))
+    print('mu^2 =  ', r2_score(y, y_pred))
 
     for i in range (len(x)):
         y_pred[i] = math.exp(y_pred[i])
@@ -115,3 +205,4 @@ if __name__ == "__main__":
     plt.plot(x_new, y_pred, c='blue', label='Regression Line')
     plt.show()
 
+'''
