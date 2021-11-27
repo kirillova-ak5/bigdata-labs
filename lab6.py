@@ -3,14 +3,15 @@ import scipy
 import numpy as np
 
 
+# semantically false for anomaly
 def threeSigmRule(num, mean, err):
-    if abs(num - mean ) > 3 * err:
+    if abs(num - mean) > 3 * err:
         return False
 
     return True
 
 
-if __name__ == "__main__":
+def lab6():
     mass = np.array([np.random.normal() for k in range(200)])
     mass[195] = 5
     mass[196] = -4
@@ -22,6 +23,9 @@ if __name__ == "__main__":
 
     math_mean = mass.mean()
     math_err = mass.std()
+
+    print("mean value: ", math_mean)
+    print("standart deviation: ", math_err)
 
     for i in range(3):
         print("Income: ", mass[i], "\n Result: ", threeSigmRule(mass[i], math_mean, math_err))

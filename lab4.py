@@ -1,5 +1,5 @@
 import numpy as np
-import scipy as sc
+import scipy.stats as st
 import matplotlib.pyplot as plt
 import tools
 
@@ -47,12 +47,10 @@ def lab4():
     ff = f.real * f.real + f.imag * f.imag
     plt.plot([(i + 1) / x.size * 2 * np.pi for i in range(x.size)], ff)
     #plt.plot(ff)
-    freq = (ff.argmax() + 1.0) / x.size * 2.0 * np.pi
+    freq = (ff[:180].argmax() + 1.0) / x.size * 2.0 * np.pi
     freq_i = ff.argmax()
     plt.show()
     print(freq)
-    print(freq_i)
-    print(ff[180:])
 
     r_01 = x - x_01
     r_05 = x - x_05
@@ -64,10 +62,11 @@ def lab4():
     print('num of rotation points estimated: ', r_est)
     print('dispersion of rotation points: ', r_disp)
 
-    print('exp mean, a = 0.01')
+    print('\n\nexp mean, a = 0.01\n')
     print('mean reminder ', r_01.mean())
+    print('disp reminder ', st.tstd(r_01))
 
-    print('num of rotation points r_mean_21: %i', tools.rot_point_arr(r_01).sum())
+    print('num of rotation points r_01: %i', tools.rot_point_arr(r_01).sum())
     if tools.rot_point_arr(r_01).sum() < r_est + r_disp and tools.rot_point_arr(r_01).sum() > r_est - r_disp:
         print('rot point random')
     elif tools.rot_point_arr(r_01).sum() > r_est + r_disp:
@@ -75,4 +74,46 @@ def lab4():
     elif tools.rot_point_arr(r_01).sum() < r_est - r_disp:
         print('rot point korrelation')
 
+    print('normal with p = ', np.sqrt(st.normaltest(r_01)[1]))
 
+    print('\n\nexp mean, a = 0.05\n')
+    print('mean reminder ', r_05.mean())
+    print('disp reminder ', st.tstd(r_05))
+
+    print('num of rotation points r_05: %i', tools.rot_point_arr(r_05).sum())
+    if tools.rot_point_arr(r_05).sum() < r_est + r_disp and tools.rot_point_arr(r_05).sum() > r_est - r_disp:
+        print('rot point random')
+    elif tools.rot_point_arr(r_05).sum() > r_est + r_disp:
+        print('rot point oscillating')
+    elif tools.rot_point_arr(r_05).sum() < r_est - r_disp:
+        print('rot point korrelation')
+
+    print('normal with p = ', np.sqrt(st.normaltest(r_05)[1]))
+
+    print('\n\nexp mean, a = 0.1\n')
+    print('mean reminder ', r_1.mean())
+    print('disp reminder ', st.tstd(r_1))
+
+    print('num of rotation points r_1: %i', tools.rot_point_arr(r_1).sum())
+    if tools.rot_point_arr(r_1).sum() < r_est + r_disp and tools.rot_point_arr(r_1).sum() > r_est - r_disp:
+        print('rot point random')
+    elif tools.rot_point_arr(r_1).sum() > r_est + r_disp:
+        print('rot point oscillating')
+    elif tools.rot_point_arr(r_1).sum() < r_est - r_disp:
+        print('rot point korrelation')
+
+    print('normal with p = ', np.sqrt(st.normaltest(r_1)[1]))
+
+    print('\n\nexp mean, a = 0.3\n')
+    print('mean reminder ', r_3.mean())
+    print('disp reminder ', st.tstd(r_3))
+
+    print('num of rotation points r_3: %i', tools.rot_point_arr(r_3).sum())
+    if tools.rot_point_arr(r_3).sum() < r_est + r_disp and tools.rot_point_arr(r_3).sum() > r_est - r_disp:
+        print('rot point random')
+    elif tools.rot_point_arr(r_3).sum() > r_est + r_disp:
+        print('rot point oscillating')
+    elif tools.rot_point_arr(r_3).sum() < r_est - r_disp:
+        print('rot point korrelation')
+
+    print('normal with p = ', np.sqrt(st.normaltest(r_3)[1]))
