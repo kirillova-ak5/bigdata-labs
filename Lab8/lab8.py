@@ -16,7 +16,7 @@ def getRss(X,Y):
     return res
 
 def getDataWeightHeight(num):
-    data = pd.read_csv('weight-height.csv').head(num)   #load first num elems
+    data = pd.read_csv('Lab8/weight-height.csv').head(num)   #load first num elems
     data['Height'] *= 2.54
     data['Weight'] /= 2.205         #to kilo and meters
 
@@ -25,7 +25,7 @@ def getDataWeightHeight(num):
     return x, y
 
 def prepareDataTemp():
-    years, data = pd.read_html('./AverageMSKTemp.htm')
+    years, data = pd.read_html('Lab8/AverageMSKTemp.htm')
     data = data.drop(list(range(82))+[243])
     years = years.drop(list(range(82))+[243])
     data.loc[:,:] = data.loc[:,:].astype('float32')
@@ -37,13 +37,13 @@ def prepareDataTemp():
     new_data = {'Year': x, 'Temperature': y}
 
     df = pd.DataFrame(new_data, columns= ['Year', 'Temperature'])
-    df.to_csv (r'./Temp.csv', index = False, header=True)
+    df.to_csv (r'Lab8/Temp.csv', index = False, header=True)
     return
 
 
 
 def getDataAverageTemp(num):
-    data = pd.read_csv('Temp.csv').head(num)   #load first num elems
+    data = pd.read_csv('Lab8/Temp.csv').head(num)   #load first num elems
 
     x = np.array(data['Year']).reshape((-1, 1))
     y = np.array(data['Temperature'])
